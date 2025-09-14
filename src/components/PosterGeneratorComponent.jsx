@@ -3,8 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { Download, Link, Image, QrCode, Edit3, Save, X, Upload } from 'lucide-react';
 
-const PosterGenerator = () => {
-  const [url, setUrl] = useState('');
+const PosterGenerator = ({ url }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPoster, setShowPoster] = useState(false);
   const [posterData, setPosterData] = useState(null);
@@ -226,9 +225,8 @@ const PosterGenerator = () => {
       className="w-[8.5in] h-[11in] bg-white p-8 flex flex-col items-center justify-between print:shadow-none"
       style={{ fontSize: '16px' }}
     >
-      {/* Header */}
       {/* UniShack Header */}
-      <div className="w-full flex items-center justify-start mb-6 p-4 text-white" style={{ backgroundColor: '#2774AE' }}>
+      <div className="w-full flex items-center justify-start mb-6 p-4 text-white shadow-lg" style={{ backgroundColor: '#2774AE' }}>
         <img 
           src="/logo.svg" 
           alt="UniShack Logo" 
@@ -244,7 +242,6 @@ const PosterGenerator = () => {
 
       {/* Header */}
       <div className="text-center mb-6">
-
         <EditableField
           value={data.subtitle}
           onUpdate={(value) => updateEditableData('subtitle', value)}
@@ -262,7 +259,7 @@ const PosterGenerator = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center space-y-6">
         {/* Property Image */}
-        <div className="relative w-96 h-64 bg-gray-100 overflow-hidden border-2 border-gray-300">
+        <div className="relative w-96 h-64 bg-gray-100 overflow-hidden shadow-lg border-2 border-gray-300">
           {data.image ? (
             <img 
               src={data.image} 
@@ -333,7 +330,7 @@ const PosterGenerator = () => {
       </div>
 
       {/* Footer - Not editable */}
-      <div className="text-center mt-8 p-6 text-white w-full" style={{ backgroundColor: '#2774AE' }}>
+      <div className="text-center mt-8 p-6 text-white w-full shadow-lg" style={{ backgroundColor: '#2774AE' }}>
         <span className="text-xl font-bold mb-2 block text-white">
           {data.footerTitle}
         </span>
@@ -345,50 +342,28 @@ const PosterGenerator = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-md mx-auto">
-        <div className="bg-white shadow-lg p-6 border border-gray-300">
-          <h1 className="text-3xl font-bold mb-6 text-center" style={{ color: '#2774AE' }}>
-            Apartment QR Poster
-          </h1>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Property Listing URL
-              </label>
-              <input
-                type="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://apartment-listing.com"
-                className="w-full px-4 py-3 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-              />
-            </div>
-            
-            <button
-              onClick={handleGeneratePoster}
-              disabled={!url || isGenerating}
-              className="w-full text-white py-3 px-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-semibold shadow-md transition-all duration-200"
-              style={{ backgroundColor: '#2774AE' }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = '#1e5a8a'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = '#2774AE'}
-            >
-              {isGenerating ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Generating Poster...
-                </>
-              ) : (
-                <>
-                  <QrCode size={20} />
-                  Create Apartment Poster
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
+    <>
+      {/* Single Generate Button */}
+      <button
+        onClick={handleGeneratePoster}
+        disabled={!url || isGenerating}
+        className="text-white py-3 px-6 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-semibold shadow-md transition-all duration-200"
+        style={{ backgroundColor: '#2774AE' }}
+        onMouseEnter={(e) => e.target.style.backgroundColor = '#1e5a8a'}
+        onMouseLeave={(e) => e.target.style.backgroundColor = '#2774AE'}
+      >
+        {isGenerating ? (
+          <>
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            Generating...
+          </>
+        ) : (
+          <>
+            <QrCode size={20} />
+            Generate QR Poster
+          </>
+        )}
+      </button>
 
       {/* Poster Modal */}
       {showPoster && posterData && (
@@ -451,7 +426,7 @@ const PosterGenerator = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
